@@ -1,25 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import RoutesApp from "./routes";
+import { AuthProvider } from "./contexts/auth";
+import GlobalStyle from "./styles/global";
 
-function App() {
+const App = () => {
+  const userToken = JSON.parse(localStorage.getItem("user_token"));
+  const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <AuthProvider userToken={userToken} usersStorage={usersStorage}>
+      <RoutesApp />
+      <GlobalStyle />
+    </AuthProvider>
+  )
+};
 
 export default App;
