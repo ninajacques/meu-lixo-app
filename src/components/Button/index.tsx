@@ -1,7 +1,8 @@
 import React from "react";
 import * as C from "./styles";
+import { ButtonProps } from "../../types/buttonTypes";
 
-const Button = ({ Text, onClick, Type = "button" }) => {
+const Button: React.FC<ButtonProps> = ({ Text, onClick, Type = "button" }) => {
   return (
     <C.Button type={Type} onClick={onClick}>
       {Text}

@@ -1,5 +1,6 @@
 import NavItem from "../NavItem";
 import * as C from "./styles";
+import React from 'react';
 
 const Sidebar = () => {
   return(

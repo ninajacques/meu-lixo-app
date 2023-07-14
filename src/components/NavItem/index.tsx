@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react';
 import * as C from './styles';
+import React from 'react';
+import { NavItemProps } from '../../types/navTypes';
 
-const iconColor = '#712eff';
-
-const NavItem = ({ icon, text, link}) => {
+const NavItem: React.FC<NavItemProps> = ({ icon, text, link }) => {
   return (
     <C.LinkStyled to={link}>
       <C.Container>
-        <Icon icon={icon} color={iconColor} />
+        <Icon icon={icon} color={C.IconColor} />
         <C.Text>{text}</C.Text>
       </C.Container>
     </C.LinkStyled>

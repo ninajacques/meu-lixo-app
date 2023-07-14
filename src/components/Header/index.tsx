@@ -1,3 +1,4 @@
+import React from "react";
 import useAuth from "../../hooks/useAuth";
 import * as C from "./styles";
 import IconButton from "../IconButton";
@@ -13,8 +14,7 @@ const Header = () => {
         <C.Container>
           <IconButton icon="ic:sharp-account-circle" iconColor="white" onClick={() => navigate('/profile')} />
           <IconButton icon="ic:sharp-logout" iconColor="white" onClick={() => signout()} />
-        </C.Container>
-        
+        </C.Container>       
     </C.Header>
   )
 }

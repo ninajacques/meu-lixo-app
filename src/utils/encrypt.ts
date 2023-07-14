@@ -1,4 +1,5 @@
-const aesjs = window.aesjs;
+import * as aesjs from 'aes-js';
+// const aesjs = window.aesjs;
 
 export const encrypt = (text) => {
     const key = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ];

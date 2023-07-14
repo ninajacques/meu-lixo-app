@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+export const IconColor = '#712eff';
+
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -9,13 +11,13 @@ export const Container = styled.div`
 `
 
 export const Text = styled.p`
-    color: #712eff;
+    color: ${IconColor};
 `
 
 export const LinkStyled = styled(Link)`
   cursor: pointer;
   text-decoration: none;
-  color: #712eff;
+  color: ${IconColor};
 
   @media only screen and (max-width: 767px) {
     flex-grow: 1;

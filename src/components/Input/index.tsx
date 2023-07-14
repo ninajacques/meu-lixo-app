@@ -1,7 +1,9 @@
 import React from "react";
 import * as C from "./styles";
+import { InputProps } from "../../types/inputTypes";
 
-const Input = ({ type, placeholder, value, onChange }) => {
+
+const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange }) => {
   return (
     <C.Input
       value={value}
