@@ -1,5 +1,5 @@
 interface ButtonBasicProps {
-  onClick: () => void;
+  onClick: (e: any) => void;
   Type?: "button" | "submit" | "reset";
 }
 

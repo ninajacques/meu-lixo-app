@@ -5,6 +5,7 @@ import * as C from "./styles";
 import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { encrypt } from "../../utils/encrypt";
+import { UserResponse } from "../../types/authTypes";
 
 const Profile = () => {
   const { user, updateUser, isLoading } = useAuth();
@@ -28,7 +29,7 @@ const Profile = () => {
   }, [user])
 
   const handleSignup = () => {
-    if (!email | !cep) {
+    if (!email || !cep) {
       setError("Preencha todos os campos obrigatórios");
       return;
     } else if (!!senha && senha !== senhaConf) {
@@ -40,7 +41,7 @@ const Profile = () => {
       ...user,
       nome,
       email,
-      senha: senha ? encrypt(senha) : user.senha,
+      senha: senha ? encrypt(senha) : user?.senha,
       endereco,
       cidade,
       cep
@@ -48,12 +49,12 @@ const Profile = () => {
 
     const res = updateUser(updatedData);
 
-    if (res) {
+    if (res !== UserResponse.NOVO_SUCESSO) {
       setError(res);
       return;
     }
 
-    alert("Dados alterados com sucesso!");
+    alert(res);
   };
 
   return isLoading ? <></> : (

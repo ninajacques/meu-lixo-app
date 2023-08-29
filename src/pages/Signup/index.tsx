@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { encrypt } from "../../utils/encrypt";
 import uuid from 'react-uuid';
+import { UserResponse } from "../../types/authTypes";
 
 const Signup = () => {
   const [nome, setNome] = useState("");
@@ -22,7 +23,7 @@ const Signup = () => {
   const { signup, user, signin, isLoading } = useAuth();
 
   const handleSignup = () => {
-    if (!email | !emailConf | !senha | !cep) {
+    if (!email || !emailConf || !senha || !cep) {
       setError("Preencha todos os campos obrigatórios");
       return;
     } else if (email !== emailConf) {
@@ -45,12 +46,12 @@ const Signup = () => {
 
     const res = signup(newUser);
 
-    if (res) {
+    if (res !== UserResponse.NOVO_SUCESSO) {
       setError(res);
       return;
     }
 
-    alert("Usuário cadastrado com sucesso!");
+    alert(res);
     signin(email, senha);
     navigate("/home");
   };

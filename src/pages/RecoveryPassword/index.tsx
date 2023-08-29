@@ -2,7 +2,7 @@ import useAuth from "../../hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import emailjs from '@emailjs/browser';
 import * as C from "./styles";
-import { useState } from "react";
+import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { decrypt } from "../../utils/encrypt";

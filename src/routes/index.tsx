@@ -8,6 +8,7 @@ import RecoveryPassword from "../pages/RecoveryPassword";
 import Schedules from "../pages/Schedules";
 import Signin from "../pages/Signin";
 import Signup from "../pages/Signup";
+import React from "react";
 
 const HeaderAndSidebarLayout = () => (
   <div id='page'>
@@ -23,13 +24,13 @@ const RoutesApp = () => {
       <Fragment>
         <Routes>
           <Route element={<HeaderAndSidebarLayout/>}>
-            <Route exact path="/home" element={<Home />} />
-            <Route exact path="/schedules" element={<Schedules />} />
-            <Route exact path="/profile" element={<Profile />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/schedules" element={<Schedules />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>  
           <Route path="/" element={<Signin />} />
-          <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/recovery_password" element={<RecoveryPassword />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/recovery_password" element={<RecoveryPassword />} />
           <Route path="*" element={<Navigate to='/' />} />
         </Routes>
       </Fragment>

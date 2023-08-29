@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { decrypt } from "../utils/encrypt";
 import React from 'react';
-import { AuthContextProps, AuthProviderProps, userProps } from "../types/authTypes";
+import { AuthContextProps, AuthProviderProps, UserResponse, userProps } from "../types/authTypes";
 
 export const AuthContext: React.Context<AuthContextProps> = createContext({} as AuthContextProps);
 
@@ -30,24 +30,24 @@ export const AuthProvider = ({ children, userToken, usersStorage }: AuthProvider
     const user = getUser(email);
 
     if(!user) {
-      return "Usuário não cadastrado";
+      return UserResponse.USUARIO_NAO_CADASTRADO;
     }
 
     if(decrypt(user.senha) !== senha) {
-      return "E-mail ou senha incorretos";
+      return UserResponse.DADOS_INCORRETOS;
     }
 
     const token = Math.random().toString(36).substring(2);
     localStorage.setItem("user_token", JSON.stringify({ id: user.id, token }));
     setUser(user);
-    return '';
+    return UserResponse.LOGIN_SUCESSO;
   };
 
   const signup = (newUser) => {
     const user = getUser(newUser.email);
 
     if (user?.length) {
-      return "Já existe uma conta com esse E-mail";
+      return UserResponse.EMAIL_DUPLICADO;
     }
 
     let newUserDb;
@@ -60,27 +60,27 @@ export const AuthProvider = ({ children, userToken, usersStorage }: AuthProvider
 
     localStorage.setItem("users_bd", JSON.stringify(newUserDb));
 
-    return;
+    return UserResponse.NOVO_SUCESSO;
   };
 
   const updateUser = (updatedData) => {
     const usersStorage = JSON.parse(localStorage.getItem("users_bd") || '');
 
     if(updatedData.email !== user?.email && usersStorage?.some(u => u.email === updatedData.email)) {
-      return "Já existe uma conta com esse E-mail";
+      return UserResponse.EMAIL_DUPLICADO;
     }
 
     const userIndex = usersStorage?.findIndex((user) => user.id === updatedData.id);
     
     if (userIndex < 0) {
-      return "Infelizmente, não foi possível alterar os dados do usuário.";
+      return UserResponse.ALTERAR_ERRO;
     }
 
     usersStorage[userIndex] = updatedData;
 
     localStorage.setItem("users_bd", JSON.stringify(usersStorage));
 
-    return;
+    return UserResponse.ALTERAR_SUCESSO;
   };
 
   const signout = () => {

@@ -2,14 +2,15 @@ import useAuth from "../../hooks/useAuth";
 import * as C from "./styles";
 import { Navigate } from "react-router-dom";
 import schedulesData from '../../assets/schedules.json';
+import React from "react";
 
 const Schedules = () => {
   const { user, isLoading } = useAuth();
 
   const days = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
-  const selectiveSchedule = schedulesData?.find(data => data.type === 'seletiva').schedules;
-  const commomSchedule = schedulesData?.find(data => data.type === 'comum').schedules;
+  const selectiveSchedule = schedulesData?.find(data => data.type === 'seletiva')?.schedules;
+  const commomSchedule = schedulesData?.find(data => data.type === 'comum')?.schedules;
 
   return isLoading ? <></> : (
     !!user ? (
@@ -17,7 +18,7 @@ const Schedules = () => {
         {(user.endereco || user.cidade) && (
           <C.Title>{`${user.endereco}, ${user.cidade}`}</C.Title>
         )}
-        {selectiveSchedule.length && (
+        {selectiveSchedule?.length && (
           <C.ScheduleSection>
             <h2>Coleta Seletiva</h2>
             {selectiveSchedule.map(selective => (
@@ -28,7 +29,7 @@ const Schedules = () => {
             ))}
           </C.ScheduleSection>
         )}
-        {commomSchedule.length && (
+        {commomSchedule?.length && (
           <C.ScheduleSection>
           <h2>Coleta Comum</h2>
           {commomSchedule.map(commom => (
