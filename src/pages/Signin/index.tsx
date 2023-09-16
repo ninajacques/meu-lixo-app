@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import * as C from "./styles";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { signinUser, signoutUser } from "../../firebase";
 
 const Signin = () => {
   const { signin, user, isLoading } = useAuth();
@@ -14,19 +15,22 @@ const Signin = () => {
   const [error, setError] = useState("");
 
   const handleLogin = () => {
+    signoutUser()
     if (!email || !senha) {
       setError("Preencha todos os campos");
       return;
     }
 
-    const res = signin(email, senha);
+    signinUser(email, senha);
 
-    if (res) {
-      setError(res);
-      return;
-    }
+    // const res = signin(email, senha);
 
-    navigate("/home");
+    // if (res) {
+    //   setError(res);
+    //   return;
+    // }
+
+    // navigate("/home");
   };
 
   return isLoading ? <></> : (

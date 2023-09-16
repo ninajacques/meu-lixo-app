@@ -4,9 +4,8 @@ import Button from "../../components/Button";
 import * as C from "./styles";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { encrypt } from "../../utils/encrypt";
-import uuid from 'react-uuid';
-import { UserResponse } from "../../types/authTypes";
+import { UserResponse, newUserProps } from "../../types/authTypes";
+import { createUser } from "../../firebase";
 
 const Signup = () => {
   const [nome, setNome] = useState("");
@@ -20,9 +19,9 @@ const Signup = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { signup, user, signin, isLoading } = useAuth();
+  const { user, isLoading, signup } = useAuth();
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!email || !emailConf || !senha || !cep) {
       setError("Preencha todos os campos obrigatórios");
       return;
@@ -34,25 +33,25 @@ const Signup = () => {
       return;
     }
 
-    const newUser = {
-      id: uuid(),
+    const newUser: newUserProps = {
+      id: '',
       nome,
       email,
-      senha: encrypt(senha),
+      senha,
       endereco,
       cidade,
       cep
     };
+    
+    const res = await createUser(newUser);
 
-    const res = signup(newUser);
-
-    if (res !== UserResponse.NOVO_SUCESSO) {
+    
+    if (res === UserResponse.EMAIL_DUPLICADO || res === UserResponse.NOVO_ERRO) {
       setError(res);
       return;
     }
 
-    alert(res);
-    signin(email, senha);
+    signup(res.accessToken!, res.newUserData);
     navigate("/home");
   };
 

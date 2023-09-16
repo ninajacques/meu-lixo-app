@@ -2,13 +2,12 @@ import React from "react";
 import RoutesApp from "./routes";
 import { AuthProvider } from "./contexts/auth";
 import GlobalStyle from "./styles/global";
+import { verifyLogin } from "./firebase";
 
 const App = () => {
-  const userToken = JSON.parse(localStorage.getItem("user_token") || '');
-  const usersStorage = JSON.parse(localStorage.getItem("users_bd") || '');
-
+  verifyLogin();
   return (
-    <AuthProvider userToken={userToken} usersStorage={usersStorage}>
+    <AuthProvider>
       <RoutesApp />
       <GlobalStyle />
     </AuthProvider>

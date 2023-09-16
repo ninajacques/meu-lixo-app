@@ -25,7 +25,7 @@ const RecoveryPassword = () => {
         emailjs.send(
           'service_ahk1tbe', 
           'template_98dhjhd', 
-          {email: userData.email, nome: userData.nome, senha: decrypt(userData.senha)}, 
+          {email: userData.email, nome: userData.nome, senha: decrypt('userData.senha')}, 
           '4L7Hf8nxc8t7MyASp'
         )
           .then((result) => {

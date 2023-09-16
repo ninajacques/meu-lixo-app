@@ -41,7 +41,7 @@ const Profile = () => {
       ...user,
       nome,
       email,
-      senha: senha ? encrypt(senha) : user?.senha,
+      senha: senha ? encrypt(senha) : 'user?.senha',
       endereco,
       cidade,
       cep
