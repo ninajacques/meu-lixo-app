@@ -1,14 +1,14 @@
-export interface userProps {
-  id: string;
+export interface userBasicProps {
+  id?: string;
   cep: string;
-  cidade: string;
+  city: string;
   email: string;
-  endereco: string; 
-  nome: string;
+  address: string; 
+  name: string;
 }
 
-export interface newUserProps extends userProps {
-  senha: string;
+export interface userProps extends userBasicProps {
+  password: string;
 }
 
 export interface AuthProviderProps {
@@ -16,13 +16,9 @@ export interface AuthProviderProps {
 }
 
 export interface AuthContextProps {
-  user?: userProps;
-  signin: (email, senha) => UserResponse;
-  signup: (accessToken: string, newUser: userProps) => void;
-  signout: () => void;
-  updateUser: (updatedData) => UserResponse;
+  user?: userBasicProps;
   isLoading: boolean;
-  getUser: (email) => userProps;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export enum UserResponse {

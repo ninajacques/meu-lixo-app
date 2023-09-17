@@ -2,35 +2,32 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { signinUser, signoutUser } from "../../firebase";
+import { signinUser } from "../../firebase";
 
 const Signin = () => {
-  const { signin, user, isLoading } = useAuth();
-  const navigate = useNavigate();
+  const { user, isLoading, setLoading } = useAuth();
 
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    signoutUser()
-    if (!email || !senha) {
+  const handleLogin = async () => {
+    if (!email || !password) {
       setError("Preencha todos os campos");
       return;
     }
 
-    signinUser(email, senha);
+    setLoading(true);
+    
 
-    // const res = signin(email, senha);
+    const res = await signinUser(email, password);
 
-    // if (res) {
-    //   setError(res);
-    //   return;
-    // }
-
-    // navigate("/home");
+    if (res) {
+      setLoading(false);
+      setError(res);
+    }
   };
 
   return isLoading ? <></> : (
@@ -41,19 +38,19 @@ const Signin = () => {
         </C.LabelSignup>
           <C.Label>Login</C.Label>
         <C.Content>
-        <C.Label>Email</C.Label>
           <Input
+            label="Email"
             type="email"
             placeholder="Digite seu E-mail"
             value={email}
             onChange={(e) => [setEmail(e.target.value), setError("")]}
           />
-          <C.Label>Senha</C.Label>
           <Input
+            label="Senha"
             type="password"
             placeholder="Digite sua Senha"
-            value={senha}
-            onChange={(e) => [setSenha(e.target.value), setError("")]}
+            value={password}
+            onChange={(e) => [setPassword(e.target.value), setError("")]}
           />
           <C.labelError>{error}</C.labelError>
           <Button Text="Entrar" onClick={handleLogin} /> 

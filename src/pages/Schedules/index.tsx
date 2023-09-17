@@ -15,8 +15,8 @@ const Schedules = () => {
   return isLoading ? <></> : (
     !!user ? (
       <C.Container>
-        {(user.endereco || user.cidade) && (
-          <C.Title>{`${user.endereco}, ${user.cidade}`}</C.Title>
+        {(user.address || user.city) && (
+          <C.Title>{`${user.address}, ${user.city}`}</C.Title>
         )}
         {selectiveSchedule?.length && (
           <C.ScheduleSection>

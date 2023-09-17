@@ -3,14 +3,18 @@ import * as C from "./styles";
 import { InputProps } from "../../types/inputTypes";
 
 
-const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange }) => {
+const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, required, label }) => {
   return (
-    <C.Input
-      value={value}
-      onChange={onChange}
-      type={type}
-      placeholder={placeholder}
-    />
+    <>
+      <C.Label>{label} {required && <span style={{color: 'red'}}>*</span>}</C.Label>
+      <C.Input
+        required={required}
+        value={value}
+        onChange={onChange}
+        type={type}
+        placeholder={placeholder}
+      />
+    </>
   );
 };
 

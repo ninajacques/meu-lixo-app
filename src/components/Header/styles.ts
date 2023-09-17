@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Header = styled.header`
@@ -19,9 +20,10 @@ export const Header = styled.header`
     }
 `;
 
-export const LogoText = styled.p`
+export const LogoText = styled(Link)`
     font-weight: 600;
     color: white;
+    text-decoration: none;
 `;
 
 export const Container = styled.div`

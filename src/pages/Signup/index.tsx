@@ -2,44 +2,122 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { UserResponse, newUserProps } from "../../types/authTypes";
+import { UserResponse, userProps } from "../../types/authTypes";
 import { createUser } from "../../firebase";
+import { InputProps } from "../../types/inputTypes";
+
+
 
 const Signup = () => {
-  const [nome, setNome] = useState("");
-  const [endereco, setEndereco] = useState("");
-  const [cidade, setCidade] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
   const [cep, setCep] = useState("");
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
-  const [senhaConf, setSenhaConf] = useState("");
-  const [senha, setSenha] = useState("");
+  const [passwordConf, setPasswordConf] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  const { user, isLoading, signup } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  const formFields: InputProps[] = [
+    {
+      label: 'Nome Completo',
+      type: 'text',
+      placeholder: 'Digite seu nome completo',
+      value: name,
+      onChange: (e) => [setName(e.target.value), setError("")],
+      required: true
+    },
+    {
+      label: 'Endereço',
+      type: 'text',
+      placeholder: 'Rua, número',
+      value: address,
+      onChange: (e) => [setAddress(e.target.value), setError("")],
+      required: false
+    },
+    {
+      label: 'Cidade',
+      type: 'text',
+      placeholder: 'Cidade',
+      value: city,
+      onChange: (e) => [setCity(e.target.value), setError("")],
+      required: false
+    },
+    {
+      label: 'CEP',
+      type: 'text',
+      placeholder: '00000-000',
+      value: cep,
+      onChange: (e) => [setCep(e.target.value), setError("")],
+      required: true
+    },
+    {
+      label: 'Email',
+      type: 'email',
+      placeholder: 'email@email.com',
+      value: email,
+      onChange: (e) => [setEmail(e.target.value), setError("")],
+      required: true
+    },
+    {
+      label: 'Confirme seu email',
+      type: 'email',
+      placeholder: 'email@email.com',
+      value: emailConf,
+      onChange: (e) => [setEmailConf(e.target.value), setError("")],
+      required: true
+    },
+    {
+      label: 'Senha',
+      type: 'password',
+      placeholder: '******',
+      value: password,
+      onChange: (e) => [setPassword(e.target.value), setError("")],
+      required: true
+    },
+    {
+      label: 'Confirme sua senha',
+      type: 'password',
+      placeholder: '******',
+      value: passwordConf,
+      onChange: (e) => [setPasswordConf(e.target.value), setError("")],
+      required: true
+    }
+  ]
 
   const handleSignup = async () => {
-    if (!email || !emailConf || !senha || !cep) {
+    if (!email || !emailConf || !password || !cep) {
       setError("Preencha todos os campos obrigatórios");
       return;
-    } else if (email !== emailConf) {
+    } 
+    
+    if (email !== emailConf) {
       setError("Os e-mails não são iguais");
       return;
-    } else if (senha !== senhaConf) {
+    }
+    
+    if (password !== passwordConf) {
       setError("As senhas não são iguais");
       return;
     }
 
-    const newUser: newUserProps = {
+    if (password.length < 6) {
+      setError("A senha deve conter no mínimo 6 dígitos");
+      return;
+    }
+
+    const newUser: userProps = {
       id: '',
-      nome,
+      name,
       email,
-      senha,
-      endereco,
-      cidade,
+      password,
+      address,
+      city,
       cep
     };
     
@@ -50,9 +128,6 @@ const Signup = () => {
       setError(res);
       return;
     }
-
-    signup(res.accessToken!, res.newUserData);
-    navigate("/home");
   };
 
   return isLoading ? <></> : (
@@ -60,63 +135,10 @@ const Signup = () => {
       <C.Container>
         <C.Label>Criar conta</C.Label>
         <C.Content>
-        <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
-        <C.Label>Nome completo <span style={{color: 'red'}}>*</span></C.Label>
-        <Input
-            type="name"
-            placeholder="Ex: João da Silva"
-            value={nome}
-            onChange={(e) => [setNome(e.target.value), setError("")]}
-          />
-          <C.Label>Endereço</C.Label>
-         <Input
-            type="adress"
-            placeholder="Ex: Rua, número"
-            value={endereco}
-            onChange={(e) => [setEndereco(e.target.value), setError("")]}
-          />
-          <C.Label>Cidade</C.Label>
-          <Input
-            type="city"
-            placeholder="Ex: Florianópolis"
-            value={cidade}
-            onChange={(e) => [setCidade(e.target.value), setError("")]}
-          />
-          <C.Label>CEP <span style={{color: 'red'}}>*</span></C.Label>
-          <Input
-            type="cep"
-            placeholder="Ex: 00000-000"
-            value={cep}
-            onChange={(e) => [setCep(e.target.value), setError("")]}
-          />
-          <C.Label>Email <span style={{color: 'red'}}>*</span></C.Label>
-          <Input
-            type="email"
-            placeholder="Ex: email@email.com"
-            value={email}
-            onChange={(e) => [setEmail(e.target.value), setError("")]}
-          />
-          <C.Label>Confirme seu email</C.Label>
-          <Input
-            type="email"
-            placeholder="Ex: email@email.com"
-            value={emailConf}
-            onChange={(e) => [setEmailConf(e.target.value), setError("")]}
-          />
-          <C.Label>Senha <span style={{color: 'red'}}>*</span></C.Label>
-          <Input
-            type="password"
-            placeholder="*****"
-            value={senha}
-            onChange={(e) => [setSenha(e.target.value), setError("")]}
-          />
-          <C.Label>Confirme sua senha</C.Label>
-           <Input
-            type="password"
-            placeholder="*****"
-            value={senhaConf}
-            onChange={(e) => [setSenhaConf(e.target.value), setError("")]}
-          />
+          <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
+          {formFields.map((formItem, i) => {
+            return <Input {...formItem} key={`input_${i}`} />;
+          })}
           <C.labelError>{error}</C.labelError>
           <Button Text="Criar Conta" onClick={handleSignup} />
           <C.LabelSignin>

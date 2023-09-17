@@ -10,3 +10,9 @@ export const Input = styled.input`
   background-color: #f0f2f5;
   border: none;
 `;
+
+export const Label = styled.label`
+  font-size: 18px;
+  font-weight: 600;
+  color: black;
+`;
