@@ -1,7 +1,7 @@
 import React from "react";
 import * as C from "./styles";
 import IconButton from "../IconButton";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signoutUser } from "../../firebase";
 
 const Header = () => {
