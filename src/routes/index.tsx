@@ -9,6 +9,7 @@ import Schedules from "../pages/Schedules";
 import Signin from "../pages/Signin";
 import Signup from "../pages/Signup";
 import React from "react";
+import useAuth from "../hooks/useAuth";
 
 const HeaderAndSidebarLayout = () => (
   <div id='page'>
@@ -19,18 +20,19 @@ const HeaderAndSidebarLayout = () => (
 );
 
 const RoutesApp = () => {
+  const { user } = useAuth();
   return (
     <BrowserRouter>
       <Fragment>
         <Routes>
           <Route element={<HeaderAndSidebarLayout/>}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/schedules" element={<Schedules />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/home" element={!user ? <Navigate to='/' /> : <Home />} />
+            <Route path="/schedules" element={!user ? <Navigate to='/' /> : <Schedules />} />
+            <Route path="/profile" element={!user ? <Navigate to='/' /> : <Profile />} />
           </Route>  
-          <Route path="/" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/recovery_password" element={<RecoveryPassword />} />
+          <Route path="/" element={user ? <Navigate to='/home' /> : <Signin />} />
+          <Route path="/signup" element={user ? <Navigate to='/home' /> : <Signup />} />
+          <Route path="/recovery_password" element={user ? <Navigate to='/home' /> : <RecoveryPassword />} />
           <Route path="*" element={<Navigate to='/' />} />
         </Routes>
       </Fragment>

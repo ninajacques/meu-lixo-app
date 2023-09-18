@@ -17,6 +17,7 @@ export interface AuthProviderProps {
 
 export interface AuthContextProps {
   user?: userBasicProps;
+  setUser: React.Dispatch<React.SetStateAction<userBasicProps | undefined>>;
   isLoading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

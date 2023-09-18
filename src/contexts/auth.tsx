@@ -7,7 +7,7 @@ export const AuthContext: React.Context<AuthContextProps> = createContext({} as 
 
 export const AuthProvider = ({children}: AuthProviderProps) => {
   const [user, setUser] = useState<userBasicProps>();
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async userRes => {
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, setLoading }}>
+    <AuthContext.Provider value={{ user, isLoading, setLoading, setUser }}>
       {children}
     </AuthContext.Provider>
   );

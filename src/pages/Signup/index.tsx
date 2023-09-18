@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
-import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { UserResponse, userProps } from "../../types/authTypes";
 import { createUser } from "../../firebase";
@@ -21,7 +20,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { user, isLoading } = useAuth();
+  const { isLoading } = useAuth();
 
   const formFields: InputProps[] = [
     {
@@ -131,22 +130,20 @@ const Signup = () => {
   };
 
   return isLoading ? <></> : (
-    !user ? (
-      <C.Container>
-        <C.Label>Criar conta</C.Label>
-        <C.Content>
-          <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
-          {formFields.map((formItem, i) => {
-            return <Input {...formItem} key={`input_${i}`} />;
-          })}
-          <C.labelError>{error}</C.labelError>
-          <Button Text="Criar Conta" onClick={handleSignup} />
-          <C.LabelSignin>
-            Já possui uma conta? <C.LinkStyled to="/">Realizar login</C.LinkStyled>
-          </C.LabelSignin>
-        </C.Content>
-      </C.Container>
-    ) : <Navigate to='/home' />
+    <C.Container>
+      <C.Label>Criar conta</C.Label>
+      <C.Content>
+        <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
+        {formFields.map((formItem, i) => {
+          return <Input {...formItem} key={`input_${i}`} />;
+        })}
+        <C.labelError>{error}</C.labelError>
+        <Button Text="Criar Conta" onClick={handleSignup} />
+        <C.LabelSignin>
+          Já possui uma conta? <C.LinkStyled to="/">Realizar login</C.LinkStyled>
+        </C.LabelSignin>
+      </C.Content>
+    </C.Container>
   );
 };
 

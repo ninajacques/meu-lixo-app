@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
-import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { signinUser } from "../../firebase";
+import ReactModal from 'react-modal';
+import { Icon } from "@iconify/react";
+import Modal from "../../components/Loading";
 
 const Signin = () => {
-  const { user, isLoading, setLoading } = useAuth();
+  const { isLoading, setLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,8 +32,12 @@ const Signin = () => {
     }
   };
 
-  return isLoading ? <></> : (
-    !user ? (
+  return (
+    <>
+      <Modal isOpen={isLoading}>
+        <Icon icon='ic:round-refresh' />
+        <p>Fazendo Login...</p>
+      </Modal>
       <C.Container>
         <C.LabelSignup>
           Não possui uma conta? <C.LinkStyled to="/signup">Criar uma conta </C.LinkStyled>
@@ -55,9 +61,9 @@ const Signin = () => {
           <C.labelError>{error}</C.labelError>
           <Button Text="Entrar" onClick={handleLogin} /> 
         </C.Content>
-        <C.LinkStyled to="/recovery_password">Esqueceu sua senha? </C.LinkStyled>
+        <C.LinkStyled to="/recovery_password">Esqueceu sua senha?</C.LinkStyled>
       </C.Container>
-    ) : <Navigate to='/home' />
+    </>
   );
 };
 

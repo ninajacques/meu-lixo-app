@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
-import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { InputProps } from "../../types/inputTypes";
 import { updateUser } from "../../firebase";
-import { userProps } from "../../types/authTypes";
 
 const Profile = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, setUser } = useAuth();
   const [name, setName] = useState(user?.name ?? '');
   const [address, setAddress] = useState(user?.address ?? '');
   const [city, setCity] = useState(user?.city ?? '');
@@ -94,7 +92,7 @@ const Profile = () => {
       return;
     }
 
-    const updatedData: userProps = { 
+    const updatedData: any = { 
       ...user,
       name,
       email,
@@ -108,22 +106,25 @@ const Profile = () => {
 
     if (res) {
       setError(res);
+      return;
     }
+
+    delete updatedData.password;
+    setUser(updatedData);
+    console.log(user);
   };
 
   return isLoading ? <></> : (
-    !!user ? (
-      <C.Container>
-        <C.Content>
-          <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
-          {formFields.map((formItem, i) => {
-            return <Input {...formItem} key={`input_${i}`} />;
-          })}
-          <C.labelError>{error}</C.labelError>
-          <Button Text="Alterar dados" onClick={handleSignup} />
-        </C.Content>
-      </C.Container>
-    ) : <Navigate to='/' />
+    <C.Container>
+      <C.Content>
+        <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
+        {formFields.map((formItem, i) => {
+          return <Input {...formItem} key={`input_${i}`} />;
+        })}
+        <C.labelError>{error}</C.labelError>
+        <Button Text="Alterar dados" onClick={handleSignup} />
+      </C.Content>
+    </C.Container>
   );
 };
 
