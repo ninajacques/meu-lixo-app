@@ -52,8 +52,6 @@ const MapComponent = () => {
     }
   }, []);
 
-  useEffect(() => console.log(markers), [markers])
-
   useEffect(() => {
     if(map && !!markLtLg) {
       var pyrmont = new google.maps.LatLng(markLtLg.lat,markLtLg.lng);

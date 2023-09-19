@@ -111,7 +111,6 @@ const Profile = () => {
 
     delete updatedData.password;
     setUser(updatedData);
-    console.log(user);
   };
 
   return isLoading ? <></> : (
