@@ -9,6 +9,7 @@ export const Container = styled.div`
   gap: 10px;
   height: 100%;
   margin-top: 16px;
+  width: 100%;
 `;
 
 export const Content = styled.div`

@@ -1,12 +1,9 @@
 import React from "react";
 import * as C from "./styles";
 import Map from "../../components/Map";
-import useAuth from "../../hooks/useAuth";
 
 const Home = () => {
-  const { isLoading } = useAuth();
-
-  return isLoading ? <></> : (
+  return (
     <C.Container>
       <Map />
     </C.Container>

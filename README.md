@@ -1,5 +1,5 @@
 SENAC
-PROJETO INTEGRADOR - DESENVOLVIMENTO DE SISTEMAS ORIENTADO A DISPOSITIVOS MOVEIS E BASEADO NA WEB
+PROJETO INTEGRADOR - ANALISE DE SOLUÇÕES INTEGRADAS PARA ORGANIZAÇÕES
 
 GRUPO:
 
@@ -11,7 +11,7 @@ GRUPO:
 
 INSTRUÇÕES PARA RODAR A APLICAÇÂO:
 
-- Rodar ```npm install``` no terminal, no repositório da aplicação, para instalação das dependências;
-- Rodar ```npm run start``` no terminal, no repositório da aplicação, para testar a aplicação;
+- Rodar `npm install` no terminal, no repositório da aplicação, para instalação das dependências;
+- Rodar `npm run start` no terminal, no repositório da aplicação, para testar a aplicação;
 - A aplicação rodará na porta http://localhost:3000;
 - No primeiro acesso, deve-se criar um usuário em "Criar uma conta", na tela de login.

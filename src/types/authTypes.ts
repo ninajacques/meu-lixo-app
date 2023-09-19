@@ -5,6 +5,8 @@ export interface userBasicProps {
   email: string;
   address: string; 
   name: string;
+  accountType: string;
+  telefone?: string;
 }
 
 export interface userProps extends userBasicProps {

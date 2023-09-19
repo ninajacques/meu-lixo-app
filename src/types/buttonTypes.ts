@@ -1,6 +1,7 @@
 interface ButtonBasicProps {
   onClick: (e: any) => void;
   Type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export interface ButtonProps extends ButtonBasicProps {

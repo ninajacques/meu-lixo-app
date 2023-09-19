@@ -45,6 +45,16 @@ export const getUser = async (userId: string) => {
   }
 }
 
+export const getAllUsers = async () => {
+  try {
+    const users = await get(child(ref(database),`users/`));
+    return users.val();
+  } catch(e) {
+    // arrumar
+    return UserResponse.NOVO_ERRO;
+  }
+}
+
 export const signinUser = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(firebaseAuth, email, password);

@@ -11,12 +11,13 @@ const Modal = ({isOpen, children }) => {
         content: { 
           width: '200px', 
           height: '100px', 
-          backgroundColor: '#dedede', 
+          backgroundColor: '#fffaff', 
           position: 'relative',  
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          flexDirection: 'column' 
+          flexDirection: 'column',
+          gap: '12px' 
         }
       }}
     >

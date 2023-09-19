@@ -13,6 +13,7 @@ const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange, requi
         onChange={onChange}
         type={type}
         placeholder={placeholder}
+        pattern={type === 'number' ? "[0-9]+" : ''}
       />
     </>
   );

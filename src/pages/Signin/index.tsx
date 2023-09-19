@@ -4,9 +4,8 @@ import Button from "../../components/Button";
 import * as C from "./styles";
 import useAuth from "../../hooks/useAuth";
 import { signinUser } from "../../firebase";
-import ReactModal from 'react-modal';
 import { Icon } from "@iconify/react";
-import Modal from "../../components/Loading";
+import Modal from "../../components/Modal";
 
 const Signin = () => {
   const { isLoading, setLoading } = useAuth();
@@ -35,8 +34,8 @@ const Signin = () => {
   return (
     <>
       <Modal isOpen={isLoading}>
-        <Icon icon='ic:round-refresh' />
-        <p>Fazendo Login...</p>
+        <Icon icon='svg-spinners:pulse-multiple' color="#712eff" width={96} height={96} />
+        <p style={{ color: "#712eff" }}>Realizando Login...</p>
       </Modal>
       <C.Container>
         <C.LabelSignup>

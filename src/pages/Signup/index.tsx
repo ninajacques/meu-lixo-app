@@ -6,25 +6,28 @@ import useAuth from "../../hooks/useAuth";
 import { UserResponse, userProps } from "../../types/authTypes";
 import { createUser } from "../../firebase";
 import { InputProps } from "../../types/inputTypes";
-
-
+import { Icon } from "@iconify/react";
+import Modal from "../../components/Modal";
+import cep from 'cep-promise';
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
-  const [cep, setCep] = useState("");
+  const [cepData, setCepData] = useState("");
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
   const [passwordConf, setPasswordConf] = useState("");
   const [password, setPassword] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [error, setError] = useState("");
+  const [accountType, setAccountType] = useState('');
 
-  const { isLoading } = useAuth();
+  const { isLoading, setLoading } = useAuth();
 
   const formFields: InputProps[] = [
     {
-      label: 'Nome Completo',
+      label: accountType === 'pontoDeColeta' ? 'Nome do Estabelecimento' : 'Nome Completo',
       type: 'text',
       placeholder: 'Digite seu nome completo',
       value: name,
@@ -49,10 +52,10 @@ const Signup = () => {
     },
     {
       label: 'CEP',
-      type: 'text',
-      placeholder: '00000-000',
-      value: cep,
-      onChange: (e) => [setCep(e.target.value), setError("")],
+      type: 'number',
+      placeholder: '00000000',
+      value: cepData,
+      onChange: (e) => [setCepData(e.target.value), setError("")],
       required: true
     },
     {
@@ -64,12 +67,12 @@ const Signup = () => {
       required: true
     },
     {
-      label: 'Confirme seu email',
-      type: 'email',
-      placeholder: 'email@email.com',
-      value: emailConf,
-      onChange: (e) => [setEmailConf(e.target.value), setError("")],
-      required: true
+      label: accountType === 'pontoDeColeta' ? 'Telefone' : 'Confirme seu email',
+      type: accountType === 'pontoDeColeta' ? 'number' : 'email',
+      placeholder: accountType === 'pontoDeColeta' ? 'Digite seu telefone' : 'email@email.com',
+      value: accountType === 'pontoDeColeta' ? telefone : emailConf,
+      onChange: (e) => [accountType === 'pontoDeColeta' ? setTelefone(e.target.value) : setEmailConf(e.target.value), setError("")],
+      required: accountType !== 'pontoDeColeta'
     },
     {
       label: 'Senha',
@@ -90,12 +93,12 @@ const Signup = () => {
   ]
 
   const handleSignup = async () => {
-    if (!email || !emailConf || !password || !cep) {
+    if (!email || !password || !cepData) {
       setError("Preencha todos os campos obrigatórios");
       return;
     } 
     
-    if (email !== emailConf) {
+    if (accountType === 'pessoaFisica' && email !== emailConf) {
       setError("Os e-mails não são iguais");
       return;
     }
@@ -110,40 +113,84 @@ const Signup = () => {
       return;
     }
 
-    const newUser: userProps = {
-      id: '',
-      name,
-      email,
-      password,
-      address,
-      city,
-      cep
-    };
+    setLoading(true);
     
-    const res = await createUser(newUser);
+    await cep(cepData)
+      .then(async () => {
+
+        const newUser: userProps = {
+          id: '',
+          name,
+          accountType,
+          email,
+          password,
+          address,
+          city,
+          cep: cepData,
+          telefone
+        };
+        
+        const res = await createUser(newUser);
+
+        if (res === UserResponse.EMAIL_DUPLICADO || res === UserResponse.NOVO_ERRO) {
+          setError(res);
+        }
+      })
+      .catch(() => setError('CEP Inválido'));
+
+    setLoading(false);
 
     
-    if (res === UserResponse.EMAIL_DUPLICADO || res === UserResponse.NOVO_ERRO) {
-      setError(res);
-      return;
-    }
   };
 
-  return isLoading ? <></> : (
-    <C.Container>
-      <C.Label>Criar conta</C.Label>
-      <C.Content>
-        <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
-        {formFields.map((formItem, i) => {
-          return <Input {...formItem} key={`input_${i}`} />;
-        })}
-        <C.labelError>{error}</C.labelError>
-        <Button Text="Criar Conta" onClick={handleSignup} />
-        <C.LabelSignin>
-          Já possui uma conta? <C.LinkStyled to="/">Realizar login</C.LinkStyled>
-        </C.LabelSignin>
-      </C.Content>
-    </C.Container>
+  return (
+    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <Modal isOpen={isLoading}>
+          <Icon icon='svg-spinners:pulse-multiple' color="#712eff" width={96} height={96} />
+          <p style={{ color: "#712eff" }}>Criando conta...</p>
+        </Modal>
+        <C.Container>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <p onClick={() => setAccountType('')} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <Icon icon='ic:baseline-keyboard-arrow-left' />
+              Voltar
+            </p>
+            <C.LabelSignin>
+              Já possui uma conta? <C.LinkStyled to="/">Realizar login</C.LinkStyled>
+            </C.LabelSignin>
+          </div>
+          <C.Label style={{ marginRight: 0}}>Criar conta</C.Label>
+            {!!accountType ? (
+              <C.Content>        
+                <p style={{color: 'red', alignSelf: 'left' }}>* Campos Obrigatórios</p>
+                {formFields.map((formItem, i) => {
+                  return <Input {...formItem} key={`input_${i}`} />;
+                })}
+                <C.labelError>{error}</C.labelError>
+                <Button Text="Criar Conta" onClick={handleSignup} disabled={!!error} />
+              </C.Content>
+            ) : (
+              <C.Container>
+                <p>Escolha um tipo de perfil para iniciar seu cadastro.</p>
+                <div style={{display: 'flex'}}>
+
+                  <C.Content style={{ cursor: 'pointer', textAlign: 'center', margin: '0 16px', alignItems: 'center' }} onClick={() => setAccountType('pessoaFisica')}>
+                    {/* icon */}
+                    <Icon icon='ic:outline-person-outline' color="#712eff" width={96} height={96} style={{backgroundColor: 'rgb(205, 187, 245)', borderRadius: '50%'}} />
+                    <h3>Pessoa física</h3>
+                    <p>Vou usar o app para explorar pontos de coleta</p>
+                  </C.Content>
+                  <C.Content style={{ cursor: 'pointer', textAlign: 'center', margin: '0 16px', alignItems: 'center' }} onClick={() => setAccountType('pontoDeColeta')}>
+                    {/* icon */}
+                    <Icon icon='ic:outline-recycling' color="#712eff" width={96} height={96} style={{backgroundColor: 'rgb(205, 187, 245)', borderRadius: '50%'}} />
+                    <h3>Espaço para reciclagem</h3>
+                    <p>Somos um ponto de coleta</p>
+                  </C.Content>
+                </div>
+              </C.Container>
+            )}
+        </C.Container>
+      </div>
   );
 };
 

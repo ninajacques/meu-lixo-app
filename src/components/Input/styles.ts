@@ -9,6 +9,16 @@ export const Input = styled.input`
 
   background-color: #f0f2f5;
   border: none;
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  [type='number']{
+    -moz-appearance: textfield;
+  }
 `;
 
 export const Label = styled.label`
